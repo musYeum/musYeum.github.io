@@ -1,26 +1,3 @@
-     <?php
-        
-        $server="127.0.0.1";
-        $username="root";
-        $password="root";
-        $database="musYEum";
-        
-   
-        $connect = mysqli_connect($server,$username,$password,$database);
-        $sql = "SELECT * FROM VIDEOS";
-        $result = mysqli_query($connect, $sql);
-        $json_array = array();
-        while($row = mysqli_fetch_assoc($result))
-        {
-            $json_array[] = $row;
-        }
-        $fp = fopen('videos.json', 'w');
-        fwrite($fp, json_encode($json_array));
-        fclose($fp);
-        
-        
-        
-        ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -317,7 +294,7 @@ $('#returnTop').click(function (e) {
         
         <div id ="returnTop">^</div>
         <div class = "banner">
-        <a href="index.php" id="title">musYeum</a>
+        <a href="index.html" id="title">musYeum</a>
         <p id="subtitle">Kanye Video Database</p>
         <hr>
         </div>
