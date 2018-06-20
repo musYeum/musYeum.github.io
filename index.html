@@ -168,7 +168,7 @@ $('.album').click(function (e) {
                     });                      
 
                   
-
+            console.log($albumSelected + ".jpg");        
             $('.morePanelLeft').append('<img id=overlayCover src="assets/'+$albumSelected+'.jpg" ></img> ');//adds selected cover to overlay panel
             $('#overlayCover').animate({width: '100%'},250);//animate album cover
 
