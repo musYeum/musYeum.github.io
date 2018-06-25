@@ -3,9 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <title>musYeum</title>
-        
         <link rel="icon" href="assets/datePics/2008.jpg">
-
+        <meta name="viewport" content="width=device-width, intitial-scale=1.0">
         
         <link rel="stylesheet" href="CSS/styles.css">
         
@@ -15,22 +14,38 @@
   crossorigin="anonymous">
         </script>
         <script>
-
+    
+    
+            
     
     
 $(document).ready(() => {
+    
+    
         
         var $dateOrAlbum;
         var $dateSelected;
-        var $albumSelected;
-        
+        var $albumSelected;        
         var outputHeight = 800;
-
-
-        
         var dates = [];
         var uniqueDates = [];
         var notUniqueDate = 1;
+        var outputVideos = [];
+        var videoIndex;
+        
+        $('#CD').animate({opacity: '1.0'},500);
+        $('#LR').animate({opacity: '1.0'},1000);
+        $('#GRAD').animate({opacity: '1.0'},1500);
+        $('#808').animate({opacity: '1.0'},2000);
+        $('#MBDTF').animate({opacity: '1.0'},2500);
+        $('#Yeezus').animate({opacity: '1.0'},3000);
+        $('#TLOP').animate({opacity: '1.0'},3500);
+        $('#ye').animate({opacity: '1.0'},4000);
+        
+        
+
+        
+   
         
         
         
@@ -63,7 +78,8 @@ $(document).ready(() => {
            
                        for(var k = 0; k < uniqueDates.length; k++){//traverse through uniqueType array
                                 $('#byDate').append('<dev class = dates id='+uniqueDates[k]+'>'+uniqueDates[k]+'</dev>');//adds type button
-                                    }                                        
+                                $('.dates').animate({opacity: '1.0'},1500);    
+    }                                        
             }           
         });//end of ajax
         
@@ -72,7 +88,7 @@ $(document).on ("click", ".dates", function (e) {
                     
         $dateOrAlbum = 'date';
                     
-        $('#dateTypeAlbums').css({"-webkit-filter": "blur(20px)", "filter": "blur(20px)"});//blurs BG
+        $('#dateTypeAlbums').css({"-webkit-filter": "blur(15px)", "filter": "blur(15px)"});//blurs BG
         $dateSelected = (e.target.id);//get album selected ID
                   
         var $output = $('#output');//div element
@@ -80,6 +96,7 @@ $(document).on ("click", ".dates", function (e) {
                    
         $('.optionList').empty();//empty overlay text
         $('#overlayCover').remove();//empty overlay img
+        
                    
         $overlay.show();//overlay
         $output.empty();//clears div
@@ -106,7 +123,6 @@ $(document).on ("click", ".dates", function (e) {
                                 
                     if(d === $dateSelected){//adds only videos from the album selected
                         types.push(video.Type);//adds type to array
-                        console.log(video.Type);
                                             }
                                                   });                      
 
@@ -141,12 +157,15 @@ $('.album').click(function (e) {
     $dateOrAlbum = 'album';
     $albumSelected = (e.target.id);//get album selected ID
 
-    $('#dateTypeAlbums').css({"-webkit-filter": "blur(20px)", "filter": "blur(20px)"});//blurs BG
+    $('#dateTypeAlbums').css({"-webkit-filter": "blur(15px)", "filter": "blur(15px)"});//blurs BG
                     
     $('#'+$albumSelected).css({"visibility": "hidden" });//hides slected Album from BG
                    
     var $output = $('#output');//div element
     var $overlay = $('.morePanel');//overlay element
+    
+   $output.empty();//clears div
+
                    
     $('.optionList').empty();//empty overlay text
     $('#overlayCover').remove();//empty overlay img
@@ -170,6 +189,7 @@ $('.album').click(function (e) {
                     });                      
 
                   
+
             $('.morePanelLeft').append('<img id=overlayCover src="assets/'+$albumSelected+'.jpg" ></img> ');//adds selected cover to overlay panel
             $('#overlayCover').animate({width: '100%'},250);//animate album cover
 
@@ -202,7 +222,10 @@ $('.album').click(function (e) {
    
 $(document).on ("click", "#exit", function (e) {// exit button clicked
     var $overlay = $('.morePanel');
+    var $output = $('#output');//div element
+
     $overlay.hide();
+    $output.empty();
    
     $('.morePanelRight').empty();
     $('.morePanelLeft').empty();
@@ -219,18 +242,26 @@ $(document).on ("click", ".options", function (a) {// one of the types is select
     var $typeSelected = $(this).text();
     var $output = $('#output');//div element
     
+    outputVideos = [];
+    videoIndex = 0;
         
     $output.empty();//clears div
     var typesArr = [];
     
-    $output.append('<div id=outputTitle></div>');
+//    $output.append('<div id ="returnTop">^</div>');
+    
+    $output.append('<div id=outputTitle><p id = asc></p></div>');
     
 
     
+    if($dateOrAlbum === 'album'){
+           if($typeSelected === 'All'){$('#outputTitle').append('<p id=albumTitle>'+$albumSelected+'</p>');}
+           else{$('#outputTitle').append('<p id=albumTitle>'+$albumSelected+' '+$typeSelected+'s'+'</p>');}}
+    if($dateOrAlbum === 'date'){
+           if($typeSelected === 'All'){$('#outputTitle').append('<p id=dateTitle>'+$dateSelected+'</p>');}
+           else{$('#outputTitle').append('<p id=dateTitle>'+$dateSelected+' '+$typeSelected+'s'+'</p>');}
+       }
     
-    if($dateOrAlbum === 'album'){$('#outputTitle').append('<p id=albumTitle>'+$albumSelected+'</p>')};
-    if($dateOrAlbum === 'date'){$('#outputTitle').append('<p id=dateTitle>'+$dateSelected+'</p>')};
-        
         $.ajax({
             type: 'GET',
             url: 'videos.json',
@@ -238,44 +269,116 @@ $(document).on ("click", ".options", function (a) {// one of the types is select
                 $.each(videos, function(i, video){//traverse through json file
                     var d = video.Date;
                         d = d.split("-");
-                        d = d[0];
+                        
+                        
                                                   
                     if($dateOrAlbum === 'album'){   
                         if ($typeSelected === 'All'){//for the all button
                             if(video.Era === $albumSelected){
                                 typesArr.push(video.Type);//
-                                $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+video.Link+'/preview></iframe><p>'+video.Description+'</p><p>'+video.Type+'</p></div>');//adds all videos
+//                                $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+video.Link+'/preview></iframe><p>'+video.Description+'</p><p>'+video.Type+'</p></div>');//adds all videos
+                                var vid = {
+                                    id: video.ID,
+                                    date: new Date(d[0],d[1]-1,d[2]),
+                                    era: video.Era,
+                                    type: video.Type,
+                                    description: video.Description,
+                                    link: video.Link
+                                };
+                                outputVideos.push(vid);
+                                console.log(vid.date);
+                                
                                                             } 
                                                     }
                     else if(video.Era === $albumSelected  && video.Type === $typeSelected){//for the other buttons
                         typesArr.push(video.Type);
-                        $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+video.Link+'/preview></iframe><p>'+video.Description+'</p><p>'+video.Type+'</p></div>');//adds certain type videos
-                                                                                           }
+//                        $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+video.Link+'/preview></iframe><p>'+video.Description+'</p><p>'+video.Type+'</p></div>');//adds certain type videos
+                        var vid = {
+                                    id: video.ID,
+                                    date: new Date(d[0],d[1]-1,d[2]),
+                                    era: video.Era,
+                                    type: video.Type,
+                                    description: video.Description,
+                                    link: video.Link
+                                };
+                                outputVideos.push(vid);
+                            console.log(vid.date);}
                                                 }
                     if($dateOrAlbum === 'date'){
                         if ($typeSelected === 'All'){//for the all button
-                            if(d === $dateSelected){
+                            if(d[0] === $dateSelected){
                                 typesArr.push(video.Type);//
-                                $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+video.Link+'/preview></iframe><p>'+video.Description+'</p><p>'+video.Type+'</p></div>');//adds all videos
-                                                    } 
+//                                $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+video.Link+'/preview></iframe><p>'+video.Description+'</p><p>'+video.Type+'</p></div>');//adds all videos
+                                 var vid = {
+                                    id: video.ID,
+                                    date: new Date(d[0],d[1]-1,d[2]),
+                                    era: video.Era,
+                                    type: video.Type,
+                                    description: video.Description,
+                                    link: video.Link
+                                };
+                                outputVideos.push(vid); 
+                                console.log(vid.date);
+                                  } 
                                                      }
-                        else if(d === $dateSelected  && video.Type === $typeSelected){//for the other buttons
+                        else if(d[0] === $dateSelected  && video.Type === $typeSelected){//for the other buttons
                             typesArr.push(video.Type);
-                            $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+video.Link+'/preview></iframe><p>'+video.Description+'</p><p>'+video.Type+'</p></div>');//adds certain type videos
-                                                                                    }
+//                            $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+video.Link+'/preview></iframe><p>'+video.Description+'</p><p>'+video.Type+'</p></div>');//adds certain type videos
+                            var vid = {
+                                    id: video.ID,
+                                    date: new Date(d[0],d[1]-1,d[2]),
+                                    era: video.Era,
+                                    type: video.Type,
+                                    description: video.Description,
+                                    link: video.Link
+                                };
+                                outputVideos.push(vid);  
+                            console.log(vid.date);}
                                             } 
                            }); 
-            }    
+                           
+//                for(var i = 0; i < outputVideos.length; i++){
+//                $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+outputVideos[i].link+'/preview></iframe><p>'+outputVideos[i].description+'</p><p>'+outputVideos[i].type+'</p></div>');//adds certain type videos
+//
+//                }           
+//                   
+       outputVideos.sort(function compare(a, b) {
+                var dateA = new Date(a.date);
+                var dateB = new Date(b.date);
+                return dateA - dateB;
+                                                });
+    
+    
+    
+    
+       if(outputVideos.length < 3){
+            for(var i = 0; i < outputVideos.length; i++){
+                $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+outputVideos[i].link+'/preview></iframe><p>'+outputVideos[i].description+'</p><p>'+outputVideos[i].type+'</p><p>'+outputVideos[i].date+'</p></div>');//adds certain type videos
+                }  
+                }
+       else{
+            for(var i = 0; i < 3; i++){
+                $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+outputVideos[i].link+'/preview></iframe><p>'+outputVideos[i].description+'</p><p>'+outputVideos[i].type+'</p><p>'+outputVideos[i].date+'</p></div>');//adds certain type videos
+                videoIndex++;
+                } 
+                if(outputVideos.length!==3){
+                $output.append('<div class=loadMoreDiv><p id = loadMore>Load More</p></div>');}
+                
+                }  
+                     
+                
+                          
+            } 
+             
         });//end of ajax
  
-        
 
         $('html, body').animate({scrollTop: $("#output").offset().top}, 1000);
-        $('#returnTop').css({"visibility": "visible" });//add returnTop button
-        $('#returnTop').animate({opacity: 1.0}, 1500);
+        
 
  
 });//end of options clicked
+
 
 
 $('#returnTop').click(function (e) {
@@ -287,15 +390,48 @@ $('#returnTop').click(function (e) {
 
 });
 
+$(document).on ("click", "#loadMore", function (a) {
+    
+    
+    var $output = $('#output');//div element
+
+    $('.loadMoreDiv').remove();
+
+    var videosLeft = outputVideos.length - videoIndex;
+    var index = videoIndex;
+    
+    console.log(outputVideos.length);   
+    console.log(videosLeft);
+    if(videosLeft < 3){
+            for(var i = index; i < outputVideos.length; i++){
+                $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+outputVideos[i].link+'/preview></iframe><p>'+outputVideos[i].description+'</p><p>'+outputVideos[i].type+'</p><p>'+outputVideos[i].date+'</p></div>');//adds certain type videos
+                }  
+                }
+       else{
+            for(var i = index; i < 3+index; i++){
+                $output.append('<div class=videoPanel><iframe src=https://drive.google.com/file/d/'+outputVideos[i].link+'/preview></iframe><p>'+outputVideos[i].description+'</p><p>'+outputVideos[i].type+'</p><p>'+outputVideos[i].date+'</p></div>');//adds certain type videos
+                videoIndex++;
+                }
+                if(videosLeft!==3){
+                $output.append('<div class=loadMoreDiv><p id = loadMore>Load More</p></div>');}
+                
+                }  
+        console.log(videoIndex);   
+
+    
+
+
+
+});
+
 
 });//end of javascript document
         </script>
     </head>
     <body>
         
-        <div id ="returnTop">^</div>
         <div class = "banner">
-        <a href="index.html" id="title">musYeum</a>
+        <a href="index.php" id="title">musYeum</a>
         <p id="subtitle">Kanye Video Database</p>
         <hr>
         </div>
@@ -306,7 +442,8 @@ $('#returnTop').click(function (e) {
         <div class = "pickPanel">
         
             <div class = "morePanel">
-                <div class = "morePanelLeft"></div>
+                <div class = "morePanelLeft">
+                </div>
                 
                 <div class = "morePanelRight">
                                        
@@ -317,32 +454,52 @@ $('#returnTop').click(function (e) {
             </div>
         <div id = "dateTypeAlbums"> 
            
-            <p id = "byDateLabel">By Year</p> 
-            <div id = "byDate">
-                
-                
-            </div>    
+             
 
-        <p id = "byAlbumLabel">By Album</p>
-        <div id="albums">
-        <img src="assets/CD.jpg" id="CD" class="album"></img>
-        <img src="assets/LR.jpg"  id="LR" class="album"></img>
-        <img src="assets/GRAD.jpg" id="GRAD" class="album"></img>
-        <img src="assets/808.jpg" id="808" class="album"></img>
-        <img src="assets/MBDTF.jpg" id="MBDTF" class="album"></img>
-        <img src="assets/Yeezus.jpg" id="Yeezus" class="album"></img>
-        <img src="assets/TLOP.jpg"  id="TLOP" class="album"></img>
-        <img src="assets/ye.jpg"  id="ye" class="album"></img>  
+        
+        <div id="albums"><p id = "byAlbumLabel">By Album</p>
+        <img src="assets/CD.jpg" id="CD" class="album">
+        <img src="assets/LR.jpg"  id="LR" class="album">
+        <img src="assets/GRAD.jpg" id="GRAD" class="album">
+        <img src="assets/808.jpg" id="808" class="album">
+        <img src="assets/MBDTF.jpg" id="MBDTF" class="album">
+        <img src="assets/YEEZUS.jpg" id="Yeezus" class="album">
+        <img src="assets/TLOP.jpg"  id="TLOP" class="album">
+        <img src="assets/YE.jpg"  id="ye" class="album">
         </div>
-
+        
+        <div id = "byDate">
+        <p id = "byDateLabel">By Year</p>  
+        </div>  
         </div>         
         </div>
    
         <div id="output" >
-            
+                    
+
             
         </div>
         
+        
+        <div class="footer" >
+            <div id="emailDiv">
+            <br>
+            <p id = "footerEmailText">Have a video thats not in the database?</p>   
+            <p id = "footerEmailText">Find an error?</p>          
+            <p id = "footerEmailText">Email questions and concerns<a href="mailto:musyeum@gmail.com">HERE</a></p>          
+
+            </div>
+            
+            <div id ="returnTop">
+            <br><br>
+            <p id = "returnTopText">Return to the top</p>   
+
+                
+            </div>
+
+            
+        </div>
      
     </body>
 </html>
+
