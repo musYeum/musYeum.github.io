@@ -466,7 +466,7 @@ iframe {
 
 }
 
-@media screen and (min-width:800px){
+@media screen and (max-width:800px){
     
     .videoPanel {
     height: 600px;;
