@@ -88,7 +88,7 @@ $(document).on ("click", ".dates", function (e) {
                     
         $dateOrAlbum = 'date';
                     
-        $('#dateTypeAlbums').css({"-webkit-filter": "blur(15px)", "filter": "blur(15px)"});//blurs BG
+        $('#container').css({"-webkit-filter": "blur(15px)", "filter": "blur(15px)"});//blurs BG
         $dateSelected = (e.target.id);//get album selected ID
                   
         var $output = $('#output');//div element
@@ -157,7 +157,7 @@ $('.album').click(function (e) {
     $dateOrAlbum = 'album';
     $albumSelected = (e.target.id);//get album selected ID
 
-    $('#dateTypeAlbums').css({"-webkit-filter": "blur(15px)", "filter": "blur(15px)"});//blurs BG
+    $('#container').css({"-webkit-filter": "blur(15px)", "filter": "blur(15px)"});//blurs BG
                     
     $('#'+$albumSelected).css({"visibility": "hidden" });//hides slected Album from BG
                    
@@ -230,7 +230,7 @@ $(document).on ("click", "#exit", function (e) {// exit button clicked
     $('.morePanelRight').empty();
     $('.morePanelLeft').empty();
    
-    $('#dateTypeAlbums').css({"-webkit-filter": "none", "filter": "none"});//blurs BG
+    $('#container').css({"-webkit-filter": "none", "filter": "none"});//blurs BG
                    
     $('.album').css({"visibility": "visible" });//removes selected album
    
@@ -383,7 +383,7 @@ $(document).on ("click", ".options", function (a) {// one of the types is select
 
 $('#returnTop').click(function (e) {
 
-    $('html, body').animate({scrollTop: $("#menu").offset().top}, 1000);
+    $('html, body').animate({scrollTop: $("body").offset().top}, 1000);
     //$('#output').empty();
 
 
@@ -431,17 +431,12 @@ $(document).on ("click", "#loadMore", function (a) {
     <body>
         
         <div class = "banner">
-        <a href="index.html" id="title">musYeum</a>
+        <a href="index.php" id="title">musYeum</a>
         <p id="subtitle">Kanye Video Database</p>
         <hr>
         </div>
         
-        
-        
-        
-        <div class = "pickPanel">
-        
-            <div class = "morePanel">
+        <div class = "morePanel">
                 <div class = "morePanelLeft">
                 </div>
                 
@@ -452,6 +447,11 @@ $(document).on ("click", "#loadMore", function (a) {
                 </div>
        
             </div>
+        
+        <div id = 'container'>
+        <div class = "pickPanel">
+        
+            
         <div id = "dateTypeAlbums"> 
            
              
@@ -463,9 +463,9 @@ $(document).on ("click", "#loadMore", function (a) {
         <img src="assets/GRAD.jpg" id="GRAD" class="album">
         <img src="assets/808.jpg" id="808" class="album">
         <img src="assets/MBDTF.jpg" id="MBDTF" class="album">
-        <img src="assets/Yeezus.jpg" id="Yeezus" class="album">
+        <img src="assets/YEEZUS.jpg" id="Yeezus" class="album">
         <img src="assets/TLOP.jpg"  id="TLOP" class="album">
-        <img src="assets/ye.jpg"  id="ye" class="album">
+        <img src="assets/YE.jpg"  id="ye" class="album">
         </div>
         
         <div id = "byDate">
@@ -473,12 +473,14 @@ $(document).on ("click", "#loadMore", function (a) {
         </div>  
         </div>         
         </div>
+   
         <div id="output" >
                     
 
             
         </div>
         
+        </div>    
         
         <div class="footer" >
             <div id="emailDiv">
@@ -498,7 +500,7 @@ $(document).on ("click", "#loadMore", function (a) {
 
             
         </div>
+            
      
     </body>
 </html>
-
